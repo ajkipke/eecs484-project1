@@ -148,8 +148,7 @@ CREATE TABLE Photos (
     photo_caption VARCHAR2(2000),
     photo_created_time TIMESTAMP NOT NULL,
     photo_modified_time TIMESTAMP,
-    photo_link VARCHAR2(2000) NOT NULL,
-    --FOREIGN KEY (album_id) REFERENCES Albums(album_id)
+    photo_link VARCHAR2(2000) NOT NULL
 );
 
 ALTER TABLE Albums
