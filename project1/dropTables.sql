@@ -2,6 +2,8 @@ DROP SEQUENCE city_seq;
 DROP SEQUENCE program_seq;
 
 DROP TRIGGER Order_Friend_Pairs;
+DROP TRIGGER city_trigger;
+DROP TRIGGER program_trigger;
 
 ALTER TABLE Albums DROP CONSTRAINT album_fkey;
 ALTER TABLE Photos DROP CONSTRAINT photo_album_fkey;
