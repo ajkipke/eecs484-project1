@@ -149,11 +149,16 @@ CREATE TABLE Photos (
     photo_created_time TIMESTAMP NOT NULL,
     photo_modified_time TIMESTAMP,
     photo_link VARCHAR2(2000) NOT NULL,
-    FOREIGN KEY (album_id) REFERENCES Albums(album_id)
+    --FOREIGN KEY (album_id) REFERENCES Albums(album_id)
 );
 
 ALTER TABLE Albums
-ADD CONSTRAINT album_fkey FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id) INITIALLY DEFERRED DEFERRABLE;
+ADD CONSTRAINT album_fkey FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id)
+INITIALLY DEFERRED DEFERRABLE;
+
+ALTER TABLE Photos
+ADD CONSTRAINT photo_album_fkey FOREIGN KEY (album_id) REFERENCES Albums(album_id) 
+INITIALLY DEFERRED DEFERRABLE;
 
 CREATE TABLE Tags (
     tag_photo_id INTEGER NOT NULL,

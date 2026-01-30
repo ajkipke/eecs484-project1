@@ -50,8 +50,6 @@ FROM project1.Public_User_Information d
 INNER JOIN Programs p ON  d.institution_name=p.institution AND d.program_concentration=p.concentration AND d.program_degree=p.degree
 WHERE d.institution_name IS NOT NULL;
 
-SET CONSTRAINTS ALL DEFERRED;
-
 INSERT INTO Albums (album_id, album_owner_id, album_name, album_created_time, album_modified_time, album_link, album_visibility, cover_photo_id)
 SELECT DISTINCT album_id, owner_id, album_name, album_created_time,    album_modified_time, album_link, album_visibility, cover_photo_id
 FROM project1.Public_Photo_Information;
@@ -61,7 +59,6 @@ SELECT DISTINCT photo_id, album_id, photo_caption, photo_created_time,    photo_
 FROM project1.Public_Photo_Information;
 
 COMMIT;
-SET CONSTRAINTS ALL IMMEDIATE;
 
 INSERT INTO Tags (tag_photo_id, tag_subject_id, tag_created_time, tag_x, tag_y)
 SELECT DISTINCT photo_id, tag_subject_id, tag_created_time, tag_x_coordinate, tag_y_coordinate

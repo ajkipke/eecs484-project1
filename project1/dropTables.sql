@@ -4,6 +4,7 @@ DROP SEQUENCE program_seq;
 DROP TRIGGER Order_Friend_Pairs;
 
 ALTER TABLE Albums DROP CONSTRAINT album_fkey;
+ALTER TABLE Photos DROP CONSTRAINT photo_album_fkey;
 
 DROP TABLE Tags;
 DROP TABLE Photos;
