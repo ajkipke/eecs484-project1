@@ -33,12 +33,21 @@ CREATE TABLE Cities (
     city_id INTEGER PRIMARY KEY,
     city_name VARCHAR2(100) NOT NULL,
     state_name VARCHAR2(100) NOT NULL,
-    country_name VARCHAR2(100) NOT NULL
+    country_name VARCHAR2(100) NOT NULL,
+    UNIQUE (city_name, state_name, country_name)
 );
 
 CREATE SEQUENCE city_seq
 START WITH 1
 INCREMENT BY 1;
+
+CREATE TRIGGER city_trigger
+BEFORE INSERT ON Cities
+FOR EACH ROW
+BEGIN
+    SELECT city_seq.NEXTVAL INTO :NEW.city_id FROM DUAL;
+END;
+/
 
 CREATE TABLE User_Current_Cities (
     user_id INTEGER PRIMARY KEY,
@@ -54,7 +63,7 @@ CREATE TABLE User_Hometown_Cities (
     FOREIGN KEY (hometown_city_id) REFERENCES Cities(city_id)
 );
 
-CREATE TABLE Messages(
+CREATE TABLE Messages (
     message_id INTEGER PRIMARY KEY,
     sender_id INTEGER NOT NULL,
     receiver_id INTEGER NOT NULL,
@@ -75,6 +84,14 @@ CREATE TABLE Programs (
 CREATE SEQUENCE program_seq
 START WITH 1
 INCREMENT BY 1;
+
+CREATE TRIGGER program_trigger
+BEFORE INSERT ON Programs
+FOR EACH ROW
+BEGIN
+    SELECT program_seq.NEXTVAL INTO :NEW.program_id FROM DUAL;
+END;
+/
 
 CREATE TABLE Education (
     user_id INTEGER NOT NULL,
@@ -103,9 +120,10 @@ CREATE TABLE User_Events (
 );
 
 CREATE TABLE Participants (
-    event_id INTEGER PRIMARY KEY,
+    event_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     confirmation VARCHAR2(100) NOT NULL,
+    PRIMARY KEY (event_id, user_id),
     FOREIGN KEY (event_id) REFERENCES User_Events(event_id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     CHECK (confirmation IN ('Attending', 'Unsure', 'Declines', 'Not_Replied'))
@@ -134,16 +152,16 @@ CREATE TABLE Photos (
     FOREIGN KEY (album_id) REFERENCES Albums(album_id)
 );
 
-ALTER TABLE Albums 
-ADD FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id);
+ALTER TABLE Albums
+ADD CONSTRAINT album_fkey FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id) INITIALLY DEFERRED DEFERRABLE;
 
-CREATE TABLE Tags(
-    tag_photo_id INTEGER PRIMARY KEY,
+CREATE TABLE Tags (
+    tag_photo_id INTEGER NOT NULL,
     tag_subject_id INTEGER NOT NULL,
     tag_created_time TIMESTAMP NOT NULL,
     tag_x NUMBER NOT NULL,
     tag_y NUMBER NOT NULL,
-    FOREIGN KEY (tag_photo_id) REFERENCES PHOTOS(PHOTO_ID),
-    FOREIGN KEY (tag_subject_id) REFERENCES USERS(USER_ID)
+    PRIMARY KEY (tag_photo_id, tag_subject_id),
+    FOREIGN KEY (tag_photo_id) REFERENCES Photos(photo_id),
+    FOREIGN KEY (tag_subject_id) REFERENCES Users(user_id)
 );
-
